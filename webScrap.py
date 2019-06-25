@@ -3,12 +3,9 @@ from urllib2 import urlopen
 from bs4 import BeautifulSoup as soup
 import mysql.connector
 
-\\database creation
+import htmldate
 
-mydb = mysql.connector.connect(
-	host="localhost",
-	user="shaddy",
-	passwd="killme12")
+mydb = mysql.connector.connect()
 
 	mycursor = mydb.cursor();
 
@@ -35,9 +32,12 @@ for container in containers:
 
 	link = container.a["href"]
 
-	cursor.execute("Insert into scraped(heading,description,link) values(?, ?, ?)",(heading, description, link))
+	date= htmldate.find_date(container.text)
+
+	cursor.execute("Insert into scraped(heading,description,link,date) values(?, ?, ?, ?)",(heading, description, link, date))
 
 
 
 	print( "heading :" + heading )
 	print("link : " + str(my_url) + str(link)  )
+	print("date : " , date)
